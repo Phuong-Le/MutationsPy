@@ -41,7 +41,7 @@ def gen_mut_matrix(exposure_matrix, signatures, sample_func = sample_mut_mat_mul
     """_summary_
 
     Args:
-        exposure_matrix (pd.DataFrame): 
+        exposure_matrix (pd.DataFrame): columns include 'burdens' (mutation burdens), 'sample_id' and 'signatures' (in proportion)
         signatures (pd.DataFrame): downloaded from COSMIC
         sample_func (function, optional): _description_. Defaults to sample_mut_mat_multinomial.
 
