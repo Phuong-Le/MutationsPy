@@ -7,6 +7,6 @@ Features are roughly similar to [MutationsR](https://github.com/Phuong-Le/mutati
 # Installations
 
 ```
-pip install pip@git+https://github.com/Phuong-Le/MutationsPy
+pip install git+https://github.com/Phuong-Le/MutationsPy
 ```
 
