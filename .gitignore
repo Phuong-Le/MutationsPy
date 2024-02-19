@@ -1,2 +1,3 @@
 .DS_Store
 build 
+src/mutationsPy.egg-info/*
