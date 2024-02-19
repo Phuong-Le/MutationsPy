@@ -17,7 +17,7 @@ def gen_context(kmer=3, symmetric=True):
         raise ValueError("kmer should be an odd number no less than 1") 
     bases = 'ACGT'
     if symmetric:
-        muts = [f'{ref}>{alt}' for ref, alt in product('CG', bases) if ref != alt]
+        muts = [f'{ref}>{alt}' for ref, alt in product('CT', bases) if ref != alt]
     else:
         muts = [f'{ref}>{alt}' for ref, alt in product(bases, bases) if ref != alt]
     if kmer == 1: 
