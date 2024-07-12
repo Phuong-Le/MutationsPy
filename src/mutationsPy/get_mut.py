@@ -43,7 +43,22 @@ def get_context(seq, pos, ref, alt, kmer=3):
         return f'{ref}>{alt}'
     else:
         return f'{seq[(pos - flank_size):pos]}[{ref}>{alt}]{seq[(pos + 1):(pos + flank_size + 1)]}'
-    
+
+def get_wt_seq(mut):
+    """take a mutation with sequence context and return the wildtype sequence
+
+    Args:
+        mut (str): mutation, for example A[C>G]T
+
+    Returns:
+        str: wildtype sequence, output for example above should be ACT
+    """
+    left, rest = mut.split("[") 
+    central, right = rest.split("]")
+    ref, alt = central.split(">")
+    return left + ref + right 
+
+
 def complementary_base(base):
     """get complementary base
 

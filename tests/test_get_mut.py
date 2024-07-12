@@ -1,5 +1,5 @@
 import pytest
-from mutationsPy.get_mut import get_mut, get_context, complementary_seq, symmetrise_context
+from mutationsPy.get_mut import get_mut, get_context, get_wt_seq, complementary_seq, symmetrise_context
 
 def test_get_mut():
     assert get_mut('A[T>C]G') == 'T>C'
@@ -13,7 +13,12 @@ def test_get_context():
         get_context('ACGTAC', pos=2, ref='G', alt='T', kmer=4)
     with pytest.raises(KeyError):
         get_context('ACGTAC', pos=2, ref='T', alt='T')
-        
+
+def test_get_wt():
+    assert get_wt_seq('A[C>T]G') == "ACG"
+    assert get_wt_seq('ACT[G>A]CTT') == "ACTGCTT"
+    assert get_wt_seq('ACT[GA>A]CTT') == "ACTGACTT"
+
 def test_complementary_seq():
     assert complementary_seq('ACGGT') == 'ACCGT'
     
