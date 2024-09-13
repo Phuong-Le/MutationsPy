@@ -45,16 +45,16 @@ def concat_sigprofiler_mutmats(mutmat_paths, outpath):
         outpath: path to the output combined mutation matrix
 
     """
-    mutmats = []
-    for mutmat_path in mutmat_paths:
-        mutmat = pd.read_csv(mutmat_path, sep = '\t')
+    mutmats = [pd.read_csv(mutmat_path, sep = '\t') for mutmat_path in mutmat_paths]
+    mut_vector = mutmats[0]['MutationType'] # using the index from the first mutation matrix 
+    corrected_mutmats = []
+    for mutmat in mutmats:
         mutmat = mutmat.set_index('MutationType', drop=True) 
-        mutmat = mutmat.sort_index(axis = 0, ascending = True)
-        mutmats.append(mutmat)
-    combined_mutmat = pd.concat(mutmats, axis=1)
+        mutmat = mutmat.reindex(mut_vector)
+        corrected_mutmats.append(mutmat)
+    combined_mutmat = pd.concat(corrected_mutmats, axis=1)
     combined_mutmat = combined_mutmat.reset_index()
     combined_mutmat.to_csv(outpath, sep = '\t', index = False)
-
 
 def get_arguments():
     parser = argparse.ArgumentParser(description='Format mutation matrix')
