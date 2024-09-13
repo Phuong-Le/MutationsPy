@@ -3,7 +3,7 @@ import pytest
 import pandas as pd
 from tempfile import NamedTemporaryFile
 
-from mutationsPy.mut_matrix import sigprofiler_to_hdp, hdp_to_sigprofiler
+from mutationsPy.mut_matrix import sigprofiler_to_hdp, hdp_to_sigprofiler, concat_sigprofiler_mutmats
 
 import os
 import sys
@@ -21,3 +21,12 @@ def test_sigprofiler_to_hdp():
         print(expected)
         assert result.equals(expected)
     
+def test_hdp_to_sigprofiler():
+    hdp_path = 'tests/test_data/mut_matrix/hdp_mutmat.txt'
+    with NamedTemporaryFile(delete=False, mode = 'w+t') as outpath:    
+        hdp_to_sigprofiler(hdp_path=hdp_path, sigprofiler_outpath=outpath.name)
+        result = pd.read_csv(outpath.name, sep = '\t')
+        print(result)
+        expected = pd.read_csv('tests/test_data/mut_matrix/sigprofiler_mutmat.txt', sep = '\t')
+        print(expected)
+        assert result.equals(expected)
