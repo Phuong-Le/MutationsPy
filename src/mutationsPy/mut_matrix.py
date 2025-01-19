@@ -5,6 +5,20 @@ from mutationsPy.gen_context import gen_context
 
 import argparse, sys
 
+def sigprofiler_to_hdp_no_rearrangement(sigprofiler_path, hdp_outpath):
+    """Convert sigprofiler-compatible matrix to HDP-compatible matrix - no reordering of columns/rows is performed. 
+
+    Args:
+        sigprofiler_path (_type_): path to sigprofiler matrix
+        hdp_outpath (_type_): path to hdp matrix
+    """
+    sigprofiler = pd.read_csv(sigprofiler_path, sep = '\t')    
+    sigprofiler = sigprofiler.set_index('MutationType')
+    sigprofiler.index.name = None
+    hdp = sigprofiler.transpose()
+    hdp.to_csv(hdp_outpath, sep = '\t', index=True, index_label=False)
+
+
 
 def sigprofiler_to_hdp(sigprofiler_path, hdp_outpath):
     """Convert sigprofiler-compatible matrix to HDP-compatible matrix. Note that this is only true for trinucleotide SNVs
@@ -61,6 +75,12 @@ def get_arguments():
     subparsers = parser.add_subparsers(required=True, dest='cmd')
     
     # parser for sigprofiler_to_hdp
+    parser_sigprofiler_to_hdp_no_rearrangement = subparsers.add_parser('sigprofiler_to_hdp_no_rearrangement', help='convert tab delimited mutation matrix from sigprofiler format to hdp format (only works for trinucleotide SNV format), no rearrangement of rows/columns is performed')
+    parser_sigprofiler_to_hdp_no_rearrangement.add_argument('--sigprofiler_path', type=str, required=True, help='path to sigprofiler tab delimited file')
+    parser_sigprofiler_to_hdp_no_rearrangement.add_argument('--hdp_outpath', type=str, required=True, help='path to output hdp tab delimited file')
+    parser_sigprofiler_to_hdp_no_rearrangement.set_defaults(func=sigprofiler_to_hdp)
+    
+    # parser for sigprofiler_to_hdp
     parser_sigprofiler_to_hdp = subparsers.add_parser('sigprofiler_to_hdp', help='convert tab delimited mutation matrix from sigprofiler format to hdp format (only works for trinucleotide SNV format)')
     parser_sigprofiler_to_hdp.add_argument('--sigprofiler_path', type=str, required=True, help='path to sigprofiler tab delimited file')
     parser_sigprofiler_to_hdp.add_argument('--hdp_outpath', type=str, required=True, help='path to output hdp tab delimited file')
@@ -84,6 +104,8 @@ def get_arguments():
 
 def main():
     args = get_arguments().parse_args()
+    if args.cmd == 'sigprofiler_to_hdp_no_rearrangement':
+        sigprofiler_to_hdp_no_rearrangement(args.sigprofiler_path, args.hdp_outpath)
     if args.cmd == 'sigprofiler_to_hdp':
         sigprofiler_to_hdp(args.sigprofiler_path, args.hdp_outpath)
     if args.cmd == 'hdp_to_sigprofiler':
